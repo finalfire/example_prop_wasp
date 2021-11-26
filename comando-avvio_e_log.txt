@@ -1,0 +1,26 @@
+$ clingo --mode=gringo --output=smodels program.asp | ./wasp-build-fra --interpreter=python --plugins-files=propagator-lazy -n0
+WASP 2.0 [script: PYTHON]
+
+Traceback (most recent call last):
+  File "/Users/finalfire/Desktop/prove_tplp/propagator-lazy.py", line 55, in checkAnswerSet
+    reason.append([x for x in myvars if answer_set[x] > 0])
+  File "/Users/finalfire/Desktop/prove_tplp/propagator-lazy.py", line 55, in <listcomp>
+    reason.append([x for x in myvars if answer_set[x] > 0])
+TypeError: list indices must be integers or slices, not str
+{a(1), a(2), t(3)}
+Traceback (most recent call last):
+  File "/Users/finalfire/Desktop/prove_tplp/propagator-lazy.py", line 55, in checkAnswerSet
+    reason.append([x for x in myvars if answer_set[x] > 0])
+  File "/Users/finalfire/Desktop/prove_tplp/propagator-lazy.py", line 55, in <listcomp>
+    reason.append([x for x in myvars if answer_set[x] > 0])
+TypeError: list indices must be integers or slices, not str
+{a(1), a(2), t(3), b(1)}
+Somma = 3
+{a(1), a(2), t(3), b(2), b(1)}
+Traceback (most recent call last):
+  File "/Users/finalfire/Desktop/prove_tplp/propagator-lazy.py", line 55, in checkAnswerSet
+    reason.append([x for x in myvars if answer_set[x] > 0])
+  File "/Users/finalfire/Desktop/prove_tplp/propagator-lazy.py", line 55, in <listcomp>
+    reason.append([x for x in myvars if answer_set[x] > 0])
+TypeError: list indices must be integers or slices, not str
+{a(1), a(2), t(3), b(2)}

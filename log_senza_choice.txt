@@ -1,0 +1,5 @@
+clingo --mode=gringo --output=smodels database.edb esempio_programma.asp | ./wasp --interpreter=python --plugins-files=propagator-lazy -n0
+WASP 2.0 [script: PYTHON]
+
+Pearson = -0.5773502691896258
+{utilityThreshold("0.25"), inCandidatePattern("dg3","1.0"), inCandidatePattern("above","0"), inCandidatePattern("htn","1.0"), inCandidatePattern("gender","1"), occurrenceUtility(879,1,"-0.1052631578947367"), occurrenceUtility(945,0,"0.6052631578947367"), occurrenceUtility(949,0,"0.6052631578947367"), occurrenceUtility(1204,1,"0.6052631578947367")}

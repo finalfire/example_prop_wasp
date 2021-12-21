@@ -1,0 +1,4 @@
+clingo --mode=gringo --output=smodels database.edb esempio_programma.asp | ./wasp --interpreter=python --plugins-files=propagator-lazy -n0
+WASP 2.0 [script: PYTHON]
+
+INCOHERENT

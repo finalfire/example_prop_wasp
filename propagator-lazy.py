@@ -1,22 +1,19 @@
-from itertools import groupby
 from scipy import stats
 import wasp
 
 atoms=[]
-names=[]
 myvars = {}
+names = {}
 reason=[]
 threshold = None
-icu_vales = list()
+icu_values = list()
 target_values = list()
 
-def all_equal(it):
-    """Ritorna vero se tutti gli elementi di it sono uguali"""
-    g = groupby(it)
-    return next(g, True) and not next(g, False)
-
+# questo viene chiamato una sola volta
 def addedVarName(var, name):
-    global atoms, names, myvars, threshold
+    global atoms, myvars, threshold, names
+
+    names[var] = name
     
     if name.startswith("occurrenceUtility"):
         # occ è il valore del predicato b, tipo: list
@@ -40,46 +37,46 @@ def getVariablesToFreeze():
 
 
 def compute(answer_set):
-    global threshold, icu_vales, target_values
+    global threshold, icu_values, target_values
 
-    acc = 0
+    icu_values = list()
+    target_values = list()
+
     for x in answer_set:
         if x < 0:
             continue
         if x not in myvars:
             continue
         
-        (tid, maxICU, target) = myvars[x]
+        (_, maxICU, target) = myvars[x]
 
-        acc += maxICU
-        icu_vales.append(maxICU)
+        icu_values.append(maxICU)
         target_values.append(target)
 
-    # se uno dei due array è costante, pearson è undefined, la setto a -2.0
-    # altrimenti la calcolo sui due array icu_values e target_values
-    pearson_value = -2.0 if all_equal(icu_vales) or all_equal(target_values) else stats.pearsonr(icu_vales, target_values)[0]
-
-    # se la pearson è undefined, l'answerset non è coerente
-    if pearson_value == -2.0:
-        return (pearson_value, True)
+    # calcolo della pearson
+    pearson_value = stats.pearsonr(icu_values, target_values)[0]
     
-    # l'answerset è coerente se la pearson è <= -soglia oppure >= soglia
-    unsat = (pearson_value > -threshold and pearson_value < threshold)
-    return (pearson_value, unsat)
+    # l'answerset è coerente se abs(pearson) >= soglia
+    sat = abs(pearson_value) >= threshold
+    return (pearson_value, not sat)
 
 
 def checkAnswerSet(*answer_set):
-    global reason
+    global reason, myvars, names
     reason = []
+
     answer_set = list(answer_set)
     (pearson, res) = compute(answer_set)
 
     # la ragione sono tutti quegli atomi che mi servirebbero per soddisfare i vincoli
     if res:
-        reason.append([x for x in myvars if answer_set[x] < 0]) # il valore di answer_set[x] è negativo se l'atomo è falso
+        l = [-x for x in myvars if answer_set[x] > 0]
+        l.extend([x for x in myvars if answer_set[x] < 0])
+        reason.append(l) # il valore di answer_set[x] è negativo se l'atomo è falso
         return wasp.incoherent()
-    
+
     print(f"Pearson = {pearson}", flush=True)
+    #print(f"Pearson = {pearson} {' '.join([names[x] for x in answer_set if x in names and answer_set[x] > 0])}", flush=True)
     return wasp.coherent()
 
 

@@ -1,0 +1,1 @@
+clingo --mode=gringo --output=smodels database.edb esempio_programma.asp | ./wasp -n0 --interpreter=python --plugins-files=propagator-lazy --silent=2
